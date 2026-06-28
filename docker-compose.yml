@@ -1,0 +1,45 @@
+# ============================================================
+# 基础编排：仅运行应用本身，数据库连接由 .env 的 DATABASE_URL 决定。
+# 适用于「使用 Supabase 或任意外部 PostgreSQL」的场景。
+#
+#   启动：docker compose up -d --build
+#
+# 若要使用「本地 Docker PostgreSQL」，叠加 override 文件：
+#   docker compose -f docker-compose.yml -f docker-compose.local-db.yml up -d --build
+# ============================================================
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # 数据库：从 .env 透传（Supabase / 外部 PostgreSQL）
+      - DATABASE_URL=${DATABASE_URL}
+      - DIRECT_URL=${DIRECT_URL:-${DATABASE_URL}}
+      # 应用认证
+      - JWT_SECRET=${JWT_SECRET}
+      # 文章下载
+      - MCP_URL=${MCP_URL:-https://changfengbox.top/api/mcp}
+      # LLM 配置
+      - LLM_PROVIDER=${LLM_PROVIDER:-stepfun}
+      - LLM_MODEL=${LLM_MODEL:-step-3.5-flash}
+      - STEPFUN_API_KEY=${STEPFUN_API_KEY:-}
+      - SILICONFLOW_API_KEY=${SILICONFLOW_API_KEY:-}
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      # 任务配置
+      - MAX_JOBS_PER_USER=${MAX_JOBS_PER_USER:-1000}
+      - JOB_RETENTION_DAYS=${JOB_RETENTION_DAYS:-30}
+      - OUTPUT_DIR=/app/output
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_DIR=${LOG_DIR:-/app/logs}
+    volumes:
+      - ./output:/app/output
+      - ./logs:/app/logs
+    restart: unless-stopped

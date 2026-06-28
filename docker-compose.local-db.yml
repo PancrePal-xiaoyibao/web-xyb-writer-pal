@@ -1,0 +1,35 @@
+# ============================================================
+# Override：叠加本地 Docker PostgreSQL，构成完全自包含的部署。
+# 与基础文件一起使用：
+#   docker compose -f docker-compose.yml -f docker-compose.local-db.yml up -d --build
+#
+# 此文件会覆盖 app 的 DATABASE_URL/DIRECT_URL 指向本地 db 服务，
+# 因此使用本地数据库时无需修改 .env 里的 DATABASE_URL。
+# 可在 .env 设置 DB_PASSWORD 自定义本地数据库密码。
+# ============================================================
+services:
+  app:
+    environment:
+      - DATABASE_URL=postgresql://xyb_user:${DB_PASSWORD:-changeme123}@db:5432/xyb_article
+      - DIRECT_URL=postgresql://xyb_user:${DB_PASSWORD:-changeme123}@db:5432/xyb_article
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=xyb_user
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme123}
+      - POSTGRES_DB=xyb_article
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U xyb_user -d xyb_article"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:
