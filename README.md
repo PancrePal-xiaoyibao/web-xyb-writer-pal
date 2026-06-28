@@ -160,6 +160,63 @@ pnpm lint         # 运行 ESLint
 | GET  | `/api/admin/stats` | 系统统计 |
 | GET  | `/api/admin/health` | 系统健康检查 |
 
+## 后续改进计划
+
+### Phase 2: 多源支持
+
+- [ ] **文本文件导入** - 支持 .txt / .md / .docx 直接上传转换
+- [ ] **小红书内容提取** - 从小红书笔记 URL 自动下载并转换
+- [ ] **微博转录** - 支持微博长文章链接
+- [ ] **哔哩哔哩字幕提取** - 从 B 站视频提取字幕并转成文章
+- [ ] **通用 URL 提取** - 支持任意网页内容爬取与转换
+
+### Phase 3: 增强功能
+
+- [ ] **批量转换** - 支持任务队列和批处理
+- [ ] **自定义模板编辑器** - 用户可自己设计模板
+- [ ] **多语言支持** - 翻译改写功能
+- [ ] **预览模式** - 实时预览转换效果
+- [ ] **CDN 图片优化** - 自动上传图片至 CDN
+
+### Phase 4: 社区建设
+
+- [ ] **开发者市场** - 分享模板与转换工具
+- [ ] **插件系统** - 允许第三方扩展
+- [ ] **API 限流优化** - 为开发者友好的调用体验
+
+## 贡献指南
+
+我们欢迎并感谢所有贡献者！无论是修复 Bug、改进功能还是完善文档，你的贡献都对小胰宝项目很重要。
+
+### 如何开始
+
+1. **Fork 仓库** - 点击 GitHub 右上角的 Fork 按钮
+2. **创建特性分支** - `git checkout -b feature/your-feature-name`
+3. **开发并测试** - 遵循项目代码风格，确保功能完整
+4. **提交 PR** - 描述清楚你的改进，关联相关 Issue
+
+### 代码规范
+
+- 使用 TypeScript，类型必须完整
+- 遵循 Next.js 最佳实践
+- 每个 API 端点都需要相应的错误处理和日志
+- 提交前运行 `pnpm lint` 检查代码
+
+### 报告问题
+
+发现 Bug 或有改进建议？欢迎提交 Issue，包括：
+
+- 问题描述
+- 复现步骤
+- 预期行为 vs 实际行为
+- 系统环境信息
+
+### 讨论与建议
+
+- GitHub Discussions - 参与功能讨论
+- Issues - 跟踪具体任务和 Bug
+- Email - info@xiaoyibao.com.cn
+
 ## 许可
 
 本项目遵循 MIT 许可证。详情请参阅 `LICENSE` 文件。
@@ -169,3 +226,4 @@ pnpm lint         # 运行 ESLint
 - 小胰宝官网：[www.xiaoyibao.com.cn](https://www.xiaoyibao.com.cn)
 - 公众号：@小胰宝助手
 - 邮箱：info@xiaoyibao.com.cn
+- GitHub Issues：[提交问题](https://github.com/PancrePal-xiaoyibao/web-xyb-writer-pal/issues)
