@@ -135,6 +135,22 @@ docker compose up -d --build
 - ✅ 包含原生依赖构建工具（python3、make、g++）
 - ✅ 支持 pnpm native packages（prisma、sharp、esbuild）
 - ✅ 优化镜像大小（~450MB）
+- ✅ 内置国内镜像源加速（Alpine + npm）
+
+#### 国内镜像源加速（已内置）
+
+项目已配置以下国内镜像源，大幅提升构建速度：
+
+| 镜像类型 | 镜像源 | 用途 |
+|---------|-------|------|
+| Alpine apk | 阿里云镜像 | 加速安装 python3、make、g++ 等工具 |
+| npm/pnpm | 淘宝 npmmirror | 加速下载 npm 依赖包 |
+
+配置文件：
+- Dockerfile 中自动配置 Alpine 阿里云镜像
+- `.npmrc` 配置淘宝 npm 镜像源
+
+如需禁用或切换镜像源，编辑 `.npmrc` 文件修改 `registry` 配置。
 
 ## 项目结构
 
