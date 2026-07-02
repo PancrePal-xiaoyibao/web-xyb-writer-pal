@@ -14,10 +14,45 @@
 
 ## 技术栈
 
+- **运行环境**：Node.js 22 LTS（Active LTS，支持至 2027 年 4 月）
+  - ⚠️ **必需**：pnpm 11.9.0+ 需要 Node.js ≥22.13
+  - Docker 部署使用 `node:22-alpine` 镜像
 - **前端**：Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui
 - **后端**：Next.js API Routes + Prisma ORM
 - **数据库**：PostgreSQL（支持 Supabase 或自建 Docker PostgreSQL）
 - **LLM**：阶跃星辰 Step-3.5-Flash（OpenAI 兼容协议）
+
+## 环境要求
+
+### 开发环境
+
+- **Node.js 22 LTS**（Active LTS 版本）
+  - ⚠️ **必需**：pnpm 11.9.0+ 需要 Node.js ≥22.13（使用了 `node:sqlite` 模块）
+  - 验证：`node --version` 应显示 `v22.x.x`
+  - 推荐使用 [nvm](https://github.com/nvm-sh/nvm) 或 [fnm](https://github.com/Schniz/fnm) 管理 Node 版本
+
+### 生产环境
+
+- Docker（推荐使用 `docker compose` 部署）
+- PostgreSQL 数据库（Supabase 或自建）
+- 阶跃星辰 API Key（用于 AI 改写功能）
+
+### 为什么选择 Node.js 22 LTS？
+
+根据 [Node.js 官方发布计划](https://nodejs.org/en/about/previous-releases)：
+
+| 版本 | 状态 | 支持周期 | 推荐场景 |
+|------|------|---------|---------|
+| **Node.js 22** | **Active LTS** | 2024.10 - 2027.04 | ✅ **生产环境首选** |
+| Node.js 20 | Maintenance LTS | 2023.10 - 2026.04 | ✅ 旧项目维护 |
+| Node.js 24 | Current → LTS | 2025.10 - 2028.04 | ⚠️ 测试新特性 |
+
+**最佳实践**：
+- ✅ 生产环境使用 Active LTS 或 Maintenance LTS
+- ❌ 避免使用 Current 版本（仅在测试新特性时使用）
+- 🔄 定期升级 LTS 版本，保持安全更新
+
+> **注意**：pnpm 11.9.0+ 使用了 Node.js 22.13 引入的 `node:sqlite` 模块，因此 Node 20 无法运行最新版 pnpm。
 
 ## 快速开始
 
@@ -76,19 +111,30 @@ pnpm dev
 
 ## 部署
 
-### 使用 Docker Compose（自建 PostgreSQL）
+### Docker 部署（推荐）
+
+Dockerfile 使用 `node:22-alpine` 镜像，确保生产环境使用正确的 Node.js LTS 版本。
+
+#### 使用 Docker Compose（自建 PostgreSQL）
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.local-db.yml up -d --build
 ```
 
-### 使用外部数据库
+#### 使用外部数据库（Supabase）
 
 ```bash
 docker compose up -d --build
 ```
 
 确保 `.env` 中的 `DATABASE_URL` 指向 Supabase 或任意 PostgreSQL 服务。
+
+#### Docker 部署优势
+
+- ✅ 自动使用 Node.js 22 LTS 环境
+- ✅ 包含原生依赖构建工具（python3、make、g++）
+- ✅ 支持 pnpm native packages（prisma、sharp、esbuild）
+- ✅ 优化镜像大小（~450MB）
 
 ## 项目结构
 

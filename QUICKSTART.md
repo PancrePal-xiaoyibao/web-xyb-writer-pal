@@ -2,11 +2,24 @@
 
 ## 前置要求
 
-- Node.js 20+
-- pnpm 9+
+### 环境要求
+
+- **Node.js 22 LTS**（推荐 Active LTS 版本，支持至 2027 年 4 月）
+  - ⚠️ **必需**：pnpm 11.9.0+ 需要 Node.js ≥22.13（使用了 `node:sqlite` 模块）
+  - 验证版本：`node --version`（应显示 v22.x.x）
+- **pnpm 9+**（通过 corepack 自动安装最新版本）
 - PostgreSQL（Supabase 或本地 Docker）
-- Python 3.10+（用于 MCP 服务端点）
 - 阶跃星辰 API Key（https://platform.stepfun.com）
+
+### 为什么选择 Node.js 22 LTS？
+
+根据 [Node.js 官方发布计划](https://nodejs.org/en/about/previous-releases)，Node.js 22 是当前 **Active LTS** 版本（2024年10月-2027年4月），提供：
+- ✅ 30个月长期支持和安全更新
+- ✅ 生产环境稳定性和性能优化
+- ✅ 支持 pnpm 11.x 最新版本
+- ✅ 内置 `node:sqlite` 等新特性
+
+> **生产环境推荐**：始终使用 Active LTS 或 Maintenance LTS 版本，避免使用 Current 版本。
 
 ## 1. 克隆与安装
 

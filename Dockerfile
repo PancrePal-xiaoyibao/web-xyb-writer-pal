@@ -1,22 +1,36 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
+
+# Configure Alpine mirror for China (Aliyun)
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 # Install dependencies only when needed
 FROM base AS deps
-RUN apk add --no-cache libc6-compat python3 make g++
+# Configure Alpine mirror (inherited from base, but ensure it's applied)
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache libc6-compat python3 make g++
 WORKDIR /app
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy package files
-COPY package.json pnpm-lock.yaml* ./
+# Configure pnpm to use Taobao npm mirror for faster downloads in China
+RUN pnpm config set registry https://registry.npmmirror.com
+
+# Copy package files and npm config
+COPY package.json pnpm-lock.yaml* .npmrc* ./
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
-RUN apk add --no-cache python3 make g++
+# Configure Alpine mirror (ensure it's applied in this stage too)
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache python3 make g++
 RUN corepack enable && corepack prepare pnpm@latest --activate
+# Configure pnpm to use Taobao npm mirror
+RUN pnpm config set registry https://registry.npmmirror.com
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
